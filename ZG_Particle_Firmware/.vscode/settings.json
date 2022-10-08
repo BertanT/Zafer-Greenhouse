@@ -7,5 +7,6 @@
     "cSpell.words": [
         "MOSFET",
         "TVOC"
-    ]
+    ],
+    "particle.targetDevice": ""
 }

@@ -3,7 +3,7 @@
 /******************************************************/
 
 #include "Particle.h"
-#line 1 "/Users/bertan/Developer/GitRepositories/Zafer-Greenhouse/ZG_Particle_Firmware/src/ZG_Particle_Firmware.ino"
+#line 1 "/Users/bertan/Developer/Zafer-Greenhouse/ZG_Particle_Firmware/src/ZG_Particle_Firmware.ino"
 /*
  * Project ZG_Particle_Firmware
  * Description: Particle Photon Greenhouse Management and Monitoring System
@@ -35,7 +35,7 @@ void setup();
 int updateReadings();
 int cloudUpdate();
 void loop();
-#line 25 "/Users/bertan/Developer/GitRepositories/Zafer-Greenhouse/ZG_Particle_Firmware/src/ZG_Particle_Firmware.ino"
+#line 25 "/Users/bertan/Developer/Zafer-Greenhouse/ZG_Particle_Firmware/src/ZG_Particle_Firmware.ino"
 #define MEASUREMENT_INTERVAL 300
 
 // Define the sea level pressure in the current location for BME280 calibration
