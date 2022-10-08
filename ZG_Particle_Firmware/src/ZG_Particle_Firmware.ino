@@ -69,12 +69,9 @@ double soil_3_rh;
 double soil_4_rh;
 double soil_5_rh;
 
-// Define variable to track watering system state
-bool is_watering = false;
-
 // Define variables for the environmental monitoring sensor
 double temperature;
-double humidity;
+double air_humidity;
 double barometric_pressure;
 double eCO2;
 double TVOC;
@@ -91,11 +88,11 @@ int read_soil_rh(int soil_pin, int soil_dry, int soil_wet) {
 int setWatering(String is_on) {
   if (is_on == "true") {
     digitalWrite(water_valve, HIGH);
-    is_watering = true;
+    Particle.publish("wateringStateChanged", "true");
     Serial.println("Watering system turned on!");
   } else if (is_on == "false") {
     digitalWrite(water_valve, LOW);
-    is_watering = false;
+    Particle.publish("wateringStateChanged", "true");
     Serial.println("Watering system turned off!");
   }else {
     Serial.println("Invalid command for function setWatering!");
@@ -149,16 +146,6 @@ void setup() {
 
   // Register watering control function to the cloud
   Particle.function("setWatering", setWatering);
-  // Register watering status function as a calculated variable to the cloud
-  Particle.variable("isWatering", is_watering);
-
-  // Register environmental monitoring variables to the cloud
-  Particle.variable("temperature", temperature);
-  Particle.variable("humidity", humidity);
-  Particle.variable("barometric_pressure", barometric_pressure);
-  Particle.variable("eCO2", eCO2);
-  Particle.variable("TVOC", TVOC);
-  Particle.variable("AQI", AQI);
 }
 
 // Unified function to update all sensor data
@@ -172,7 +159,7 @@ int updateReadings() {
 
   // Update environmental monitoring sensor readings
   temperature = bme280.getTemperature();
-  humidity = bme280.getHumidity();
+  air_humidity = bme280.getHumidity();
   barometric_pressure = bme280.getPressure();
   eCO2 = ens160.getECO2();
   TVOC = ens160.getTVOC();
@@ -180,8 +167,28 @@ int updateReadings() {
   return 0;
 }
 
+// Take new measurement and publish to cloud
+int cloudUpdate() {
+  // Take new measurements
+  updateReadings();
+  // Publish to cloud
+  Particle.publish("soil_1_rh", String::format("%.1f", soil_1_rh));
+  Particle.publish("soil_2_rh", String::format("%.1f", soil_2_rh));
+  Particle.publish("soil_3_rh", String::format("%.1f", soil_3_rh));
+  Particle.publish("soil_4_rh", String::format("%.1f", soil_4_rh));
+  Particle.publish("soil_5_rh", String::format("%.1f", soil_5_rh));
+  Particle.publish("temperature", String::format("%.1f", temperature));
+  Particle.publish("humidity", String::format("%.1f", air_humidity));
+  Particle.publish("barometric_pressure", String::format("%.1f", barometric_pressure));
+  Particle.publish("eCO2", String::format("%.1f", eCO2));
+  Particle.publish("TVOC", String::format("%.1f", TVOC));
+  Particle.publish("AQI", String::format("%.1f", AQI));
+  return 0;
+}
+
 void loop() {
   // Periodically calibrate the ENS160 sensor according to the current conditions
   ens160.setTempAndHum(bme280.getTemperature(), bme280.getHumidity());
+  cloudUpdate();
   softDelay(MEASUREMENT_INTERVAL*1000);
 }
