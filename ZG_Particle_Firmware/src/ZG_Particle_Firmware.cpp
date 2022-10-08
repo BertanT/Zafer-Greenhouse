@@ -150,14 +150,6 @@ void setup() {
   }
   ens160.setPWRMode(ENS160_STANDARD_MODE);
 
-  // * Cloud Setup! *
-  // Register soil moisture variables to the cloud
-  Particle.variable("soil_1_rh", soil_1_rh);
-  Particle.variable("soil_2_rh", soil_2_rh);
-  Particle.variable("soil_3_rh", soil_3_rh);
-  Particle.variable("soil_4_rh", soil_4_rh);
-  Particle.variable("soil_5_rh", soil_5_rh);
-
   // Register watering control function to the cloud
   Particle.function("setWatering", setWatering);
 }
