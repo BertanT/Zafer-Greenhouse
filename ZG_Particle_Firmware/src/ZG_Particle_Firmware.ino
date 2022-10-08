@@ -1,7 +1,7 @@
 /*
  * Project ZG_Particle_Firmware
  * Description: Particle Photon Greenhouse Management and Monitoring System
- * Author: Mehmet Bertan Tarakçıoğlu
+ * Author: Mehmet Bertan Tarakçıoğlu (https://github.com/BertanT)
  * Date: October 10 2020
 
   The firmware includes code for all functionality to be used in the greenhouse, that is:
